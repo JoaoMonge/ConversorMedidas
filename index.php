@@ -1,12 +1,19 @@
 <?php
 
-$mostrar = false;
+$mostrar = "";
+$tmpF = 0.0;
 $tmpC = 0.0;
 
-if( isset( $_POST["tempF"] ) ) {
-    $tmpF = floatval($_POST["tempF"]);
-    $tmpC = ($tmpF - 32) * (5 / 9);
-    $mostrar = true;
+if (isset($_POST["temp"]) && isset($_POST["opcao"])) {
+    if ($_POST["opcao"] == "F") {
+        $tmpF = floatval($_POST["temp"]);
+        $tmpC = ($tmpF - 32) * (5 / 9);
+        $mostrar = "C";
+    } else {
+        $tmpC = floatval($_POST["temp"]);
+        $tmpF = ($tmpC * 1.8 + 32);
+        $mostrar = "F";
+    }
 }
 ?>
 
@@ -21,17 +28,26 @@ if( isset( $_POST["tempF"] ) ) {
 </head>
 <body>
 <form></form>
-    <form method="post">
-        <label for="tempF" >Temperatura em Farhneith</label>
-        <input type="number" name="tempF" required>
-        <input type="submit" value="Converter">
-    </form>
+<form method="post">
+    <label for="tempF">Temperatura</label>
+    <input type="number" name="temp" required>
+
+    <select name="opcao">
+        <option value="F">Fahrenheit</option>
+        <option value="C">Celsius</option>
+    </select>
+
+    <input type="submit" value="Converter">
+</form>
 
 
-
-<?php if($mostrar) {?>
+<?php if ($mostrar != "") { ?>
     <h1>Resultado da conversão:</h1>
-    <p><?php echo $tmpC ?> ºC</p>
-<?php } ?>
+    <?php if ($mostrar == "C") { ?>
+        <p><?php echo $tmpC ?> ºC</p>
+    <?php } else { ?>
+        <p> <?php echo $tmpF ?> ºF</p>
+    <?php }
+} ?>
 </body>
 </html>
